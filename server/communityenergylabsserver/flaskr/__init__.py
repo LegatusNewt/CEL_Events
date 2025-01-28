@@ -1,8 +1,13 @@
 import os
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, Response
 from flask_cors import CORS
+from communityenergylabsserver.cache import cache, preload_cache
 from communityenergylabsserver.routes import events
+from communityenergylabsserver.models.EventSchema import load_events_data
+
+class JSONResponse(Response):
+        default_mimetype = 'application/json'
 
 def create_app(test_config=None):
     # create and configure the app
@@ -43,8 +48,16 @@ def create_app(test_config=None):
     def serve_static(path):
         return send_from_directory(os.path.join(app.root_path, '../../dist'), path)
     
-    # Register Routes w/ blueprints
+    # Register event routes
     app.register_blueprint(events.event_routes)
 
+    # Default response type to json
+    app.response_class = JSONResponse
+    
+    cache.init_app(app)
+
+    # Preload cache
+    with app.app_context():
+        preload_cache()
 
     return app
