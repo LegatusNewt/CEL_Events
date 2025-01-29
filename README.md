@@ -78,4 +78,7 @@ If you post new event objects with the API you can include a repeat type in the 
     ]
 }
 ```
+
+![image](https://github.com/user-attachments/assets/69606df9-8af0-4053-8108-48fc42dce59d)
+
 The /schedule endpoint runs some business logic to create repeated events in the return body based on the "RepeatType" and the modifer "num". In this "DAY_OF_WEEK" example the num represents the day of the week that is repeated. So this repeats the event every following Thursday and Friday (Monday = 0).
