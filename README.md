@@ -17,6 +17,29 @@ git clone git@github.com:LegatusNewt/CEL_Events.git
 - Caveats!
 You should see the docker build process happen and eventually the Flask App will be running on localhost:5000. If localhost:5000 is not available this won't work so you may need to change the ports in the docker-compose file and dockerr file, as well as the server-url in the Vue app and rebuild it with Vite
 
+## Optional!! Building and Running Locally
+You will need the following
+- Python 3.12
+- Poetry package manager ( no requirements.txt for pip here )
+- npm or yarn , i prefer yarn
+
+### Steps
+1. Navigate to the client directory and install the dependencies with yarn
+2. Run the command `yarn run vite build`
+3. The vite.config is setup to build the Vue.js app into the server /dist folder
+```
+  build: {
+    outDir: path.join('../../server', 'dist')
+  }
+```
+4. Navigate to the server directory
+5. Install packages with poetry `poetry install` , you may want to use the venv functionality of poetry
+6. Set FLASK_APP Env variable 
+```
+export FLASK_APP="./communityenergylabsserver/flaskr/__init__.py"
+```
+7. Run Flask Server `poetry run flask run`
+
 
 ## Tech Stack
 - Vue.js
