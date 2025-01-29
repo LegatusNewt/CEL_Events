@@ -48,25 +48,12 @@ async function saveEvent() {
         const responseObject = await eventsStore.addEvent(newEvent)
         if (responseObject) {
             // Add the new event to the list just id and name
-            eventsList.value.push({
-                id: responseObject.id,
-                name: newEvent.name,
-            })
+            eventsList.value = eventsStore.getEventListItems
         }
     }
     else if (!isNewEvent.value) {
         const updatedEvent = await eventsStore.updateEvent(workingId, newEvent)
-        if (updatedEvent) {
-            eventsList.value = eventsList.value.map((event) => {
-                if (event.id === newEvent.id) {
-                    return {
-                        id: newEvent.id,
-                        name: newEvent.name,
-                    }
-                }
-                return event
-            })
-        }
+        eventsList.value = eventsStore.getEventListItems
     }
     isNewEvent.value = false
 }
