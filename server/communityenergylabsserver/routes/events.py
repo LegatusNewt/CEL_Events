@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from communityenergylabsserver.cache import cache
-from communityenergylabsserver.models.EventSchema import EventSchema, Event, load_events_data, save_events_data
+from communityenergylabsserver.models.EventSchema import EventSchema, Event, load_events_data, save_events_data, checkNoOverlap
 from datetime import datetime
 import json
 
@@ -61,6 +61,10 @@ def post_event():
     body['id'] = new_id
     new_event = EventSchema().load(body)
 
+    # Check no overlap
+    if not checkNoOverlap(list(events.values()), new_event):
+        return 'Event overlaps with existing event', 400
+
     events.update({new_id: new_event})
     cache.set('events', events)
     # Return event ID as json
@@ -101,6 +105,10 @@ def put_event(event_id):
 
     # Form new Event class object from PUT json
     new_event = EventSchema().load(schema_dict)
+
+        # Check no overlap
+    if not checkNoOverlap(list(events.values()), new_event):
+        return 'Event overlaps with existing event', 400
 
     print(new_event)
     

@@ -144,3 +144,13 @@ def load_events_data(file):
             return events
         except ValidationError as err:
             return json.dumps(err.messages), 400
+
+# Check that new event does not overlap with existing events
+def checkNoOverlap(events: List[Event], new_event: Event):
+    for event in events:
+        # Continue if new event shares id with existing event
+        if new_event.id == event.id:
+            continue
+        if new_event.start_time < event.end_time and new_event.end_time > event.start_time:
+            return False
+    return True

@@ -21,9 +21,17 @@ def test_events_get(client):
     assert len(data) == 4
     
 
+# Test Posting overlapping events
+def test_events_post_overlap(client):
+    response = client.post("/events", json={"name": "Test Event", "start_time": "2025-01-10T00:00:00", "end_time": "2025-01-10T06:00:00"})
+    _id = response.json['id']
+    assert response.status_code == 200
+    response = client.post("/events", json={"name": "Test Event", "start_time": "2025-01-10T00:00:00", "end_time": "2025-01-10T07:00:00"})
+    assert response.status_code == 400
+
 # Test posting a new event
 def test_events_post(client):
-    response = client.post("/events", json={"name": "Test Event", "start_time": "2025-01-01T00:00:00", "end_time": "2025-01-01T06:00:00"})
+    response = client.post("/events", json={"name": "Test Event", "start_time": "2025-01-15T00:00:00", "end_time": "2025-01-15T06:00:00"})
     assert response.status_code == 200
     assert response.json['id'] == 5
 
@@ -37,21 +45,12 @@ def test_events_update(client):
     assert response.status_code == 200
     assert response.json['name'] == "Updated Event"
 
-# Test that you can't post multiple events with overlapping datetimes
-def test_events_overlap(client):
-    _r = client.post("/events", json={"name": "Test Event", "start": "2025-01-01T00:00:00", "end": "2025-01-02T00:00:00"})
-    response = client.post("/events", json={"name": "Test Event 2", "start": "2025-01-01T12:00:00", "end": "2025-01-02T12:00:00"})
-    # Expect a 400 Bad Request response
-    assert response.status_code == 400
-
-    # Assert that only the first event was added
-    assert client.get("/events").json.length == 1
 
 # Test schedule endpoint returns correct number of events
 def test_schedule(client):
     response = client.get("/events/schedule?start_date=2025-01-01T00:00:00&end_date=2025-02-01T00:00:00")
     assert response.status_code == 200
-    assert len(response.json) == 14
+    assert len(response.json) == 16
 
 # TODO: Test all the other options for repeating events
 def test_repeat_dates_function():

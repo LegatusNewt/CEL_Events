@@ -6,4 +6,5 @@ from communityenergylabsserver.seed import seed_test_events
 def client():
     app = create_app()
     seed_test_events()
+    # Pass test config to create_app
     yield app.test_client()

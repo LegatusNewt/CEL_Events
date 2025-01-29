@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, send_from_directory, Response
 from flask_cors import CORS
-from communityenergylabsserver.cache import cache, preload_cache
+from communityenergylabsserver.cache import cache, preload_cache, preload_test_cache
 from communityenergylabsserver.routes import events
 from communityenergylabsserver.models.EventSchema import load_events_data
 
@@ -47,8 +47,11 @@ def create_app(test_config=None):
     CORS(app, resources={r'/*': {'origins': '*'}})    
     cache.init_app(app)
 
-    # Preload cache
+    # Preload cache with data
     with app.app_context():
-        preload_cache()
+        # If not testing load cache data
+        if test_config is None:
+            preload_cache()
+
 
     return app
