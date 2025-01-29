@@ -67,6 +67,7 @@ export const useEventsStore = defineStore('events', {
                     throw new Error('Failed to add event')
                 }
                 this.fetchEvents()
+                this.fetchSchedule()
                 return response.json() // Return json of new event
             }
             catch (error) {
@@ -82,6 +83,7 @@ export const useEventsStore = defineStore('events', {
                     throw new Error('Failed to delete event')
                 }
                 this.fetchEvents()
+                this.fetchSchedule()
                 // If doesn't fail we assume it succeeded
                 return true;
             }
@@ -102,6 +104,7 @@ export const useEventsStore = defineStore('events', {
                     throw new Error('Failed to update event')
                 }
                 this.fetchEvents()
+                this.fetchSchedule()
                 return response.json() // Return json of updated event
             }
             catch (error) {

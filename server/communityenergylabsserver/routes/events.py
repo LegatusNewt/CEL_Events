@@ -25,6 +25,9 @@ def get_event(event_id):
 def get_schedule():
     start_date = datetime.fromisoformat(request.args.get('start_date'))
     end_date = datetime.fromisoformat(request.args.get('end_date'))
+    # Set times to 00:00:00 and 23:59:59
+    start_date = start_date.replace(hour=0, minute=0, second=0)
+    end_date = end_date.replace(hour=23, minute=59, second=59)
     events = cache.get('events')
     # Check for events between start and end date
     if not events:
