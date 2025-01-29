@@ -40,6 +40,9 @@ export FLASK_APP="./communityenergylabsserver/flaskr/__init__.py"
 ```
 7. Run Flask Server `poetry run flask run`
 
+## Data
+The data is simply stored in a server cache and loading in from a data.json file when the server starts. There is functionality to update the data file from the cache but it is not hooked up to the Vue app. You can save state with the /events [PATCH] rest option via the API.
+
 
 ## Tech Stack
 - Vue.js
