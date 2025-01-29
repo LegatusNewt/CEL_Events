@@ -14,7 +14,7 @@ def preload_test_cache():
     cache.add('events', events_dict)
 
 def preload_cache():
-    events_list = load_events_data('server/data/data.json')
+    events_list = load_events_data('./data/data.json')
 
     #Convert to dict with ID as key
     events_dict = {event.id: event for event in events_list}
