@@ -27,6 +27,8 @@ def get_schedule():
     end_date = datetime.fromisoformat(request.args.get('end_date'))
     events = cache.get('events')
     # Check for events between start and end date
+    if not events:
+        return jsonify("No events found")
     scheduled_events = [event for event in events.values() if event.start_time >= start_date and event.end_time <= end_date]
 
     # Check repeat events

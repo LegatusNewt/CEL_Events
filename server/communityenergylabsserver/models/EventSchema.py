@@ -42,14 +42,16 @@ class Event:
     # Based on repeat_interval, generate repeat_dates within given window
     def produce_repeat_events(self, start_window, end_window):
         repeat_dates = []
+        day_of_week = self.start_time.weekday()
         for item in self.repeat_types:
+            interval = item['num']
             # Get repeat type and value
             if item["type"] == RepeatTypes.DAILY:                
                 # Repeat every day or every x days ex starting from start_time
-                repeat_rule = rrule.rrule(rrule.DAILY, bysetpos=self.start_time.day ,dtstart=start_window, until=end_window, interval=item["num"])
+                repeat_rule = rrule.rrule(rrule.DAILY, bysetpos=self.start_time.day ,dtstart=start_window, until=end_window, interval=interval)
             elif item["type"] == RepeatTypes.WEEKLY.value:
-                # Repeat every week on the same day of the week or every x weeks ex. { "weekly": 2 } would repeat every 2 weeks
-                repeat_rule = rrule.rrule(rrule.WEEKLY, byweekday=self.start_time.weekday(), dtstart=start_window, until=end_window, interval=item["num"])                
+                # Repeat weekly on the same day of the week ex. { "weekly": 2 } would repeat every 2 weeks on the same day of the week
+                repeat_rule = rrule.rrule(rrule.WEEKLY, byweekday=day_of_week, dtstart=start_window, until=end_window) #BUG: interval option appeared to not work as expected so removed it
             elif item["type"] == RepeatTypes.WHICH_WEEK.value:
                 # Repeat every month on the same week of the month ex. { "whichweek": 2 } would repeat every 2nd week of the month on the same day of the week
                 repeat_rule = rrule.rrule(rrule.MONTHLY, byweekno=item["num"], byweekday=start_window.weekday(), dtstart=start_window, until=end_window)
